@@ -3,6 +3,6 @@ ARG image=build
 
 FROM aursu/pearbuild:${centos}-${image}
 
-RUN yum -y --enablerepo custom install \
+RUN yum -y install \
         GeoIP-devel \
     && yum clean all && rm -rf /var/cache/yum
