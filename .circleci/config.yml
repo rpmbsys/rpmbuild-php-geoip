@@ -76,13 +76,6 @@ jobs:
             git submodule sync
             git submodule update --init
       - run:
-          name: Start docker services for rpmbuild
-          command: |
-            docker-compose -f rpmbuild/docker-compose.yml pull
-            docker-compose -f rpmbuild/docker-compose.yml up -d
-          background: true
-          no_output_timeout: 2h
-      - run:
           name: Build Docker images (PHP 5)
           command: |
             docker-compose -f docker-compose.php5.yml build --no-cache
