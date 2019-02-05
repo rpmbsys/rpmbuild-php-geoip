@@ -37,9 +37,12 @@ jobs:
               sudo useradd -o -u 48 -g centos -M -d /var/www/html centos
             fi
       - run:
-          name: Start docker services for rpmbuild
+          name: Pull docker services images
           command: |
             docker-compose -f rpmbuild/docker-compose.yml pull
+      - run:
+          name: Start docker services for rpmbuild
+          command: |
             docker-compose -f rpmbuild/docker-compose.yml up -d
           background: true
           no_output_timeout: 2h
@@ -111,9 +114,12 @@ jobs:
               sudo useradd -o -u 48 -g centos -M -d /var/www/html centos
             fi
       - run:
-          name: Start docker services for rpmbuild
+          name: Pull docker services images
           command: |
             docker-compose -f rpmbuild/docker-compose.yml pull
+      - run:
+          name: Start docker services for rpmbuild
+          command: |
             docker-compose -f rpmbuild/docker-compose.yml up -d
           background: true
           no_output_timeout: 2h
