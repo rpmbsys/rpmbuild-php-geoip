@@ -23,6 +23,27 @@ jobs:
             git submodule sync
             git submodule update --init
       - run:
+          name: Create Build User/Group
+          command: |
+            if getent group centos; then
+              sudo groupmod -o -g 48 centos
+            else
+              sudo groupadd -o -g 48 centos
+            fi
+
+            if getent passwd centos; then
+              sudo usermod -o -u 48 -g centos centos
+            else
+              sudo useradd -o -u 48 -g centos -M -d /var/www/html centos
+            fi
+      - run:
+          name: Start docker services for rpmbuild
+          command: |
+            docker-compose -f rpmbuild/docker-compose.yml pull
+            docker-compose -f rpmbuild/docker-compose.yml up -d
+          background: true
+          no_output_timeout: 2h
+      - run:
           name: Build Docker images
           command: |
             docker-compose build --no-cache
@@ -75,6 +96,27 @@ jobs:
           command: |
             git submodule sync
             git submodule update --init
+      - run:
+          name: Create Build User/Group
+          command: |
+            if getent group centos; then
+              sudo groupmod -o -g 48 centos
+            else
+              sudo groupadd -o -g 48 centos
+            fi
+
+            if getent passwd centos; then
+              sudo usermod -o -u 48 -g centos centos
+            else
+              sudo useradd -o -u 48 -g centos -M -d /var/www/html centos
+            fi
+      - run:
+          name: Start docker services for rpmbuild
+          command: |
+            docker-compose -f rpmbuild/docker-compose.yml pull
+            docker-compose -f rpmbuild/docker-compose.yml up -d
+          background: true
+          no_output_timeout: 2h
       - run:
           name: Build Docker images (PHP 5)
           command: |
