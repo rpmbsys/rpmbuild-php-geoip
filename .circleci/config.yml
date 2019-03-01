@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build71:
     machine:
       docker_layer_caching: true
     environment:
