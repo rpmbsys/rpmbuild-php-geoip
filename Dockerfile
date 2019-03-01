@@ -1,7 +1,12 @@
 ARG centos=7
-ARG image=geoip-base
+ARG image=php-7.1
 
-FROM aursu/peclbuild:${centos}-${image}
+FROM aursu/pearbuild:${centos}-${image}
+
+# PHP 7.3 build image based on pcre2-devel
+RUN yum -y install \
+        GeoIP-devel \
+    && yum clean all && rm -rf /var/cache/yum
 
 COPY SOURCES ${BUILD_TOPDIR}/SOURCES
 COPY SPECS ${BUILD_TOPDIR}/SPECS
