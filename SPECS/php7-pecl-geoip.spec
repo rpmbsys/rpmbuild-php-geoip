@@ -1,14 +1,14 @@
-%global php_apiver  %((echo 0; php -i 2>/dev/null | sed -n 's/^PHP API => //p') | tail -1)
-%{!?php_extdir: %{expand: %%global php_extdir %(php-config --extension-dir)}}
-%{!?php_inidir:  %global php_inidir  %{_sysconfdir}/php.d}
-%{!?php_incldir: %global php_incldir %{_includedir}/php}
-%{!?__pecl:     %{expand: %%global __pecl     %{_bindir}/pecl}}
-%{!?__php:       %global __php       %{_bindir}/php}
+%global php_apiver  %((echo 0; php7 -i 2>/dev/null | sed -n 's/^PHP API => //p') | tail -1)
+%{!?php_extdir: %{expand: %%global php_extdir %(php7-config --extension-dir)}}%{!?php_inidir:  %global php_inidir  %{_sysconfdir}/php.d}
+%{!?php_inidir:  %global php_inidir  %{_sysconfdir}/php7/php.d}
+%{!?php_incldir: %global php_incldir %{_includedir}/php7}
+%{!?__pecl:     %{expand: %%global __pecl     %{_bindir}/pecl7}}
+%{!?__php:       %global __php       %{_bindir}/php7}
 
 %define pecl_name geoip
 %global ini_name  40-%{pecl_name}.ini
 
-Name:		php-pecl-geoip
+Name:		php7-pecl-geoip
 Version:	1.1.1
 Release:	2%{?dist}
 Summary:	Extension to map IP addresses to geographic places
@@ -18,8 +18,9 @@ URL:		http://pecl.php.net/package/%{pecl_name}
 Source0:	http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 
 BuildRequires:	GeoIP-devel
-BuildRequires:	php-devel
-BuildRequires:	php-pear
+BuildRequires:	php7-devel
+BuildRequires:	php7-pear
+BuildConflicts: php-devel
 
 Requires(post): %{__pecl}
 Requires(postun): %{__pecl}
@@ -70,8 +71,8 @@ fi
 
 %build
 cd %{pecl_name}-%{version}
-phpize
-%configure --with-php-config=%{_bindir}/php-config
+phpize7
+%configure --with-php-config=%{_bindir}/php7-config
 make %{?_smp_mflags}
 
 
@@ -121,19 +122,19 @@ fi
 %files
 %license %{pecl_name}-%{version}/LICENSE
 %doc %{pecl_docdir}/%{pecl_name}
-%config(noreplace) %{_sysconfdir}/php.d/%{ini_name}
+%config(noreplace) %{_sysconfdir}/php7/php.d/%{ini_name}
 %{php_extdir}/%{pecl_name}.so
 %{pecl_xmldir}/%{name}.xml
 
 
 %changelog
-* Tue Aug  7 2018 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-2
-- Build for CentOS 6 and PHP 5.6
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
 * Mon Nov 14 2016 Remi Collet <remi@fedoraproject.org> - 1.1.1-1
 - update to 1.1.1
 
-* Mon Jul 27 2016 Remi Collet <remi@fedoraproject.org> - 1.1.0-1
+* Wed Jul 27 2016 Remi Collet <remi@fedoraproject.org> - 1.1.0-1
 - update to 1.1.0 (beta)
 - https://fedoraproject.org/wiki/Changes/php70
 - cleanup spec
