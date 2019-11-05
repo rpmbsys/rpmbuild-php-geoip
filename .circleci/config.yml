@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build71:
     machine:
       image: ubuntu-1604:201903-01
     environment:
@@ -79,5 +79,5 @@ workflows:
   version: 2
   geoipbuild:
     jobs:
-      - build
+      - build71
       - build73
