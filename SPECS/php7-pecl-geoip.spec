@@ -1,5 +1,5 @@
 %global php_apiver  %((echo 0; php7 -i 2>/dev/null | sed -n 's/^PHP API => //p') | tail -1)
-%{!?php_extdir: %{expand: %%global php_extdir %(php7-config --extension-dir)}}%{!?php_inidir:  %global php_inidir  %{_sysconfdir}/php.d}
+%{!?php_extdir: %{expand: %%global php_extdir %(php7-config --extension-dir)}}
 %{!?php_inidir:  %global php_inidir  %{_sysconfdir}/php7/php.d}
 %{!?php_incldir: %global php_incldir %{_includedir}/php7}
 %{!?__pecl:     %{expand: %%global __pecl     %{_bindir}/pecl7}}
@@ -32,13 +32,6 @@ Provides:       php-%{pecl_name}               = %{version}
 Provides:       php-%{pecl_name}%{?_isa}       = %{version}
 Provides:       php-pecl(%{pecl_name})         = %{version}
 Provides:       php-pecl(%{pecl_name})%{?_isa} = %{version}
-
-
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
-# Filter shared private
-%{?filter_provides_in: %filter_provides_in %{_libdir}/.*\.so$}
-%{?filter_setup}
-%endif
 
 %description
 This PHP extension allows you to find the location of an IP address
@@ -122,7 +115,7 @@ fi
 %files
 %license %{pecl_name}-%{version}/LICENSE
 %doc %{pecl_docdir}/%{pecl_name}
-%config(noreplace) %{_sysconfdir}/php7/php.d/%{ini_name}
+%config(noreplace) %{php_inidir}/%{ini_name}
 %{php_extdir}/%{pecl_name}.so
 %{pecl_xmldir}/%{name}.xml
 

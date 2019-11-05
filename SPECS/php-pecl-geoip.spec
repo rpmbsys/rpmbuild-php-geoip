@@ -32,13 +32,6 @@ Provides:       php-%{pecl_name}%{?_isa}       = %{version}
 Provides:       php-pecl(%{pecl_name})         = %{version}
 Provides:       php-pecl(%{pecl_name})%{?_isa} = %{version}
 
-
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
-# Filter shared private
-%{?filter_provides_in: %filter_provides_in %{_libdir}/.*\.so$}
-%{?filter_setup}
-%endif
-
 %description
 This PHP extension allows you to find the location of an IP address
 City, State, Country, Longitude, Latitude, and other information as
@@ -121,7 +114,7 @@ fi
 %files
 %license %{pecl_name}-%{version}/LICENSE
 %doc %{pecl_docdir}/%{pecl_name}
-%config(noreplace) %{_sysconfdir}/php.d/%{ini_name}
+%config(noreplace) %{php_inidir}/%{ini_name}
 %{php_extdir}/%{pecl_name}.so
 %{pecl_xmldir}/%{name}.xml
 
