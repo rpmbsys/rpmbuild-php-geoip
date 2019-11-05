@@ -15,9 +15,7 @@ jobs:
             git submodule update --init
       - run:
           name: Pull images for RPM build docker services
-          command: |
-            docker-compose -f rpmbuild/docker-compose.yml pull
-            docker-compose -f rpmbuild/docker-compose.bintray.yml pull
+          command: docker-compose -f rpmbuild/docker-compose.bintray.yml pull
       - run:
           name: Build Docker images
           command: docker-compose build --no-cache
@@ -52,9 +50,7 @@ jobs:
             git submodule update --init
       - run:
           name: Pull images for RPM build docker services
-          command: |
-            docker-compose -f rpmbuild/docker-compose.yml pull
-            docker-compose -f rpmbuild/docker-compose.bintray.yml pull
+          command: docker-compose -f rpmbuild/docker-compose.bintray.yml pull
       - run:
           name: Build Docker images (PHP 7.3)
           command: docker-compose -f docker-compose.php73.yml build --no-cache
