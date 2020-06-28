@@ -10,7 +10,7 @@
 
 Name:		php-pecl-geoip
 Version:	1.1.1
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Extension to map IP addresses to geographic places
 Group:		Development/Languages
 License:	PHP
@@ -120,6 +120,9 @@ fi
 
 
 %changelog
+* Sun Jun 28 2020 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-3
+- Build for CentOS 8.2
+
 * Tue Aug  7 2018 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-2
 - Build for CentOS 6 and PHP 5.6
 
