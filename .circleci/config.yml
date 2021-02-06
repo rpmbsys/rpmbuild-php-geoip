@@ -11,16 +11,8 @@ workflows:
           build_service: centos7geoip
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
-          name: centos7geoiprel
-          build_service: centos7geoiprel
-          bintray_uploader: centos7bintray
-      - docker-rpmbuild/build:
           name: centos8geoip
           build_service: centos8geoip
-          bintray_uploader: centos8bintray
-      - docker-rpmbuild/build:
-          name: centos8geoiprel
-          build_service: centos8geoiprel
           bintray_uploader: centos8bintray
       - docker-rpmbuild/build:
           name: centos7geoipphp73
@@ -33,12 +25,12 @@ workflows:
           build_service: centos8geoipphp73
           bintray_uploader: centos8bintray
       - docker-rpmbuild/build:
-          name: centos7geoipphp74
-          build_file: docker-compose.php74.yml
-          build_service: centos7geoipphp74
+          name: centos7geoipphp80
+          build_file: docker-compose.php80.yml
+          build_service: centos7geoipphp80
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
-          name: centos8geoipphp74
-          build_file: docker-compose.php74.yml
-          build_service: centos8geoipphp74
+          name: centos8geoipphp80
+          build_file: docker-compose.php80.yml
+          build_service: centos8geoipphp80
           bintray_uploader: centos8bintray
