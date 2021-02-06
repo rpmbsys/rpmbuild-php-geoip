@@ -11,6 +11,7 @@ addons:
 env:
   global:
     - PACKAGE_VCS_URL=https://github.com/aursu/rpmbuild-php-geoip
+    - BINTRAY_DEBUG=1
   jobs:
     - BUILD_COMPOSE_FILE=docker-compose.yml       BINTRAY_REPO=php74custom BUILD=centos7geoip      UPLOADER=centos7bintray
     - BUILD_COMPOSE_FILE=docker-compose.yml       BINTRAY_REPO=php74custom BUILD=centos8geoip      UPLOADER=centos8bintray
