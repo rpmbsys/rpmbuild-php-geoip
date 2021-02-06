@@ -17,6 +17,10 @@ License:	PHP
 URL:		http://pecl.php.net/package/%{pecl_name}
 Source0:	http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 
+# Upstream patch for PHP 8
+# https://svn.php.net/viewvc?view=revision&revision=351082
+Patch0:         %{pecl_name}-php8.patch
+
 BuildRequires:	GeoIP-devel
 BuildRequires:	php-devel
 BuildRequires:	php-pear
@@ -53,6 +57,9 @@ extension=%{pecl_name}.so
 EOF
 
 cd %{pecl_name}-%{version}
+
+%patch0 -p3 -b .up
+
 # Upstream often forget this
 extver=$(sed -n '/#define PHP_GEOIP_VERSION/{s/.* "//;s/".*$//;p}' php_geoip.h)
 if test "x${extver}" != "x%{version}"; then
@@ -60,13 +67,11 @@ if test "x${extver}" != "x%{version}"; then
    exit 1
 fi
 
-
 %build
 cd %{pecl_name}-%{version}
 phpize
 %configure --with-php-config=%{_bindir}/php-config
 make %{?_smp_mflags}
-
 
 %install
 make -C %{pecl_name}-%{version} install INSTALL_ROOT=%{buildroot} INSTALL="install -p"
@@ -82,7 +87,6 @@ cd %{pecl_name}-%{version}
 for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
 do install -Dpm 644 $i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
 done
-
 
 %check
 cd %{pecl_name}-%{version}
@@ -122,6 +126,7 @@ fi
 %changelog
 * Sat Feb  6 2021 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-4
 - Build for CentOS 8.3
+- add upstream patch for PHP 8
 
 * Sun Jun 28 2020 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-3
 - Build for CentOS 8.2
