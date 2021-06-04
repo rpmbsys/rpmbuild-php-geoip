@@ -5,6 +5,9 @@
 %{!?__pecl:     %{expand: %%global __pecl     %{_bindir}/pecl7}}
 %{!?__php:       %global __php       %{_bindir}/php7}
 
+%define _debugsource_template %{nil}
+%define debug_package %{nil}
+
 %define pecl_name geoip
 %global ini_name  40-%{pecl_name}.ini
 

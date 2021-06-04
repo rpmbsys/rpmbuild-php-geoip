@@ -15,40 +15,34 @@ workflows:
       - docker-rpmbuild/build:
           name: centos7geoip
           build_service: centos7geoip
-          package-vcs-url: https://github.com/aursu/rpmbuild-php-geoip
           bintray-repo: php74custom
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
           name: centos8geoip
           build_service: centos8geoip
-          package-vcs-url: https://github.com/aursu/rpmbuild-php-geoip
           bintray-repo: php74custom
           bintray_uploader: centos8bintray
       - docker-rpmbuild/build:
           name: centos7geoipphp73
           build_file: docker-compose.php73.yml
           build_service: centos7geoipphp73
-          package-vcs-url: https://github.com/aursu/rpmbuild-php-geoip
           bintray-repo: php73custom
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
           name: centos8geoipphp73
           build_file: docker-compose.php73.yml
           build_service: centos8geoipphp73
-          package-vcs-url: https://github.com/aursu/rpmbuild-php-geoip
           bintray-repo: php73custom
           bintray_uploader: centos8bintray
       - docker-rpmbuild/build:
           name: centos7geoipphp80
           build_file: docker-compose.php80.yml
           build_service: centos7geoipphp80
-          package-vcs-url: https://github.com/aursu/rpmbuild-php-geoip
           bintray-repo: php8custom
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
           name: centos8geoipphp80
           build_file: docker-compose.php80.yml
           build_service: centos8geoipphp80
-          package-vcs-url: https://github.com/aursu/rpmbuild-php-geoip
           bintray-repo: php8custom
           bintray_uploader: centos8bintray
