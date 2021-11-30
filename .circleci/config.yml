@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  docker-rpmbuild: aursu/rpmbuild@1.1.7
+  docker-rpmbuild: aursu/rpmbuild@1.1.8
 
 parameters:
   artifactory-url:
@@ -23,16 +23,16 @@ workflows:
           bintray-repo: php74custom
           bintray_uploader: centos8bintray
       - docker-rpmbuild/build:
-          name: centos7geoipphp73
-          build_file: docker-compose.php73.yml
-          build_service: centos7geoipphp73
-          bintray-repo: php73custom
+          name: centos7geoipphp81
+          build_file: docker-compose.php81.yml
+          build_service: centos7geoipphp81
+          bintray-repo: php81custom
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
-          name: centos8geoipphp73
-          build_file: docker-compose.php73.yml
-          build_service: centos8geoipphp73
-          bintray-repo: php73custom
+          name: centos8geoipphp81
+          build_file: docker-compose.php81.yml
+          build_service: centos8geoipphp81
+          bintray-repo: php81custom
           bintray_uploader: centos8bintray
       - docker-rpmbuild/build:
           name: centos7geoipphp80

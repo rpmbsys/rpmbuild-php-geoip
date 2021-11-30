@@ -1,32 +1,27 @@
-%global php_apiver  %((echo 0; php -i 2>/dev/null | sed -n 's/^PHP API => //p') | tail -1)
-%{!?php_extdir: %{expand: %%global php_extdir %(php-config --extension-dir)}}
-%{!?php_inidir:  %global php_inidir  %{_sysconfdir}/php.d}
-%{!?php_incldir: %global php_incldir %{_includedir}/php}
-%{!?__pecl:     %{expand: %%global __pecl     %{_bindir}/pecl}}
-%{!?__php:       %global __php       %{_bindir}/php}
-
 %define _debugsource_template %{nil}
 %define debug_package %{nil}
 
 %define pecl_name geoip
 %global ini_name  40-%{pecl_name}.ini
 
-Name:		php-pecl-geoip
-Version:	1.1.1
-Release:	4%{?dist}
-Summary:	Extension to map IP addresses to geographic places
-Group:		Development/Languages
-License:	PHP
-URL:		http://pecl.php.net/package/%{pecl_name}
-Source0:	http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
+Name:           php-pecl-geoip
+Version:        1.1.1
+Release:        17%{?dist}
+Summary:        Extension to map IP addresses to geographic places
+License:        PHP
+URL:            https://pecl.php.net/package/%{pecl_name}
+Source0:        https://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 
-# Upstream patch for PHP 8
+# Upstream patches
 # https://svn.php.net/viewvc?view=revision&revision=351082
 Patch0:         %{pecl_name}-php8.patch
+Patch1:         %{pecl_name}-php81.patch
 
-BuildRequires:	GeoIP-devel
-BuildRequires:	php-devel
-BuildRequires:	php-pear
+BuildRequires:  make
+BuildRequires:  gcc
+BuildRequires:  GeoIP-devel
+BuildRequires:  php-devel
+BuildRequires:  php-pear
 
 Requires(post): %{__pecl}
 Requires(postun): %{__pecl}
@@ -60,8 +55,8 @@ extension=%{pecl_name}.so
 EOF
 
 cd %{pecl_name}-%{version}
-
-%patch0 -p3 -b .up
+%patch0 -p1 -b .php8
+%patch1 -p1 -b .php81
 
 # Upstream often forget this
 extver=$(sed -n '/#define PHP_GEOIP_VERSION/{s/.* "//;s/".*$//;p}' php_geoip.h)
@@ -127,6 +122,10 @@ fi
 
 
 %changelog
+* Thu Oct 28 2021 Remi Collet <remi@remirepo.net> - 1.1.1-17
+- rebuild for https://fedoraproject.org/wiki/Changes/php81
+- add upstream patch for PHP 8.1
+
 * Sat Feb  6 2021 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-4
 - Build for CentOS 8.3
 - add upstream patch for PHP 8
