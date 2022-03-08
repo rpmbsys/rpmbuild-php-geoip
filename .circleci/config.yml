@@ -18,10 +18,10 @@ workflows:
           bintray-repo: php74custom
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
-          name: centos8geoip
-          build_service: centos8geoip
+          name: stream8geoip
+          build_service: stream8geoip
           bintray-repo: php74custom
-          bintray_uploader: centos8bintray
+          bintray_uploader: stream8bintray
       - docker-rpmbuild/build:
           name: centos7geoipphp81
           build_file: docker-compose.php81.yml
@@ -29,20 +29,8 @@ workflows:
           bintray-repo: php81custom
           bintray_uploader: centos7bintray
       - docker-rpmbuild/build:
-          name: centos8geoipphp81
+          name: stream8geoipphp81
           build_file: docker-compose.php81.yml
-          build_service: centos8geoipphp81
+          build_service: stream8geoipphp81
           bintray-repo: php81custom
-          bintray_uploader: centos8bintray
-      - docker-rpmbuild/build:
-          name: centos7geoipphp80
-          build_file: docker-compose.php80.yml
-          build_service: centos7geoipphp80
-          bintray-repo: php8custom
-          bintray_uploader: centos7bintray
-      - docker-rpmbuild/build:
-          name: centos8geoipphp80
-          build_file: docker-compose.php80.yml
-          build_service: centos8geoipphp80
-          bintray-repo: php8custom
-          bintray_uploader: centos8bintray
+          bintray_uploader: stream8bintray
