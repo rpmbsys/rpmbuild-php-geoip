@@ -3,7 +3,7 @@ ARG image=php-7.4
 
 FROM aursu/pearbuild:${os}-${image}
 
-RUN dnf -y install \
+RUN dnf -y install --enablerepo=bintray-custom \
         GeoIP-devel \
     && dnf clean all && rm -rf /var/cache/dnf
 
