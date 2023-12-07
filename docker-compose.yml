@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile.el7
       args:
         centos: $OS7
+        image: php-8.3
   rocky8build:
     volumes:
       - rpm8rocky:/home/centos/rpmbuild/RPMS
@@ -15,6 +16,7 @@ services:
       context: .
       args:
         os: $RL8
+        image: php-8.3
   stream9build:
     volumes:
       - rpm9stream:/home/centos/rpmbuild/RPMS
@@ -22,6 +24,7 @@ services:
       context: .
       args:
         os: $OS9
+        image: php-8.3
 
 volumes:
   rpm7:
