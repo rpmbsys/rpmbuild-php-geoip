@@ -1,12 +1,12 @@
 %define _debugsource_template %{nil}
 %define debug_package %{nil}
 
-%define pecl_name geoip
+%global pecl_name geoip
 %global ini_name  40-%{pecl_name}.ini
 
 Name:           php-pecl-geoip
 Version:        1.1.1
-Release:        17%{?dist}
+Release:        33%{?dist}
 Summary:        Extension to map IP addresses to geographic places
 License:        PHP-3.01
 URL:            https://pecl.php.net/package/%{pecl_name}
@@ -17,14 +17,13 @@ Source0:        https://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 Patch0:         %{pecl_name}-php8.patch
 Patch1:         %{pecl_name}-php81.patch
 
+ExcludeArch:    %{ix86}
+
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  GeoIP-devel
 BuildRequires:  php-devel
 BuildRequires:  php-pear
-
-Requires(post): %{__pecl}
-Requires(postun): %{__pecl}
 
 Requires:       php(zend-abi) = %{php_zend_api}
 Requires:       php(api) = %{php_core_api}
@@ -34,9 +33,10 @@ Provides:       php-%{pecl_name}%{?_isa}       = %{version}
 Provides:       php-pecl(%{pecl_name})         = %{version}
 Provides:       php-pecl(%{pecl_name})%{?_isa} = %{version}
 
+
 %description
-This PHP extension allows you to find the location of an IP address
-City, State, Country, Longitude, Latitude, and other information as
+This PHP extension allows you to find the location of an IP address 
+City, State, Country, Longitude, Latitude, and other information as 
 all, such as ISP and connection type. It makes use of Maxminds geoip
 database
 
@@ -65,11 +65,13 @@ if test "x${extver}" != "x%{version}"; then
    exit 1
 fi
 
+
 %build
 cd %{pecl_name}-%{version}
 phpize
 %configure --with-php-config=%{_bindir}/php-config
-make %{?_smp_mflags}
+%make_build
+
 
 %install
 make -C %{pecl_name}-%{version} install INSTALL_ROOT=%{buildroot} INSTALL="install -p"
@@ -85,6 +87,7 @@ cd %{pecl_name}-%{version}
 for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
 do install -Dpm 644 $i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
 done
+
 
 %check
 cd %{pecl_name}-%{version}
@@ -105,13 +108,6 @@ NO_INTERACTION=1 \
     -d extension=%{pecl_name}.so \
     --show-diff
 
-%post
-%{pecl_install} %{pecl_xmldir}/%{name}.xml >/dev/null || :
-
-%postun
-if [ $1 -eq 0 ] ; then
-    %{pecl_uninstall} %{pecl_name} >/dev/null || :
-fi
 
 %files
 %license %{pecl_name}-%{version}/LICENSE
@@ -122,19 +118,104 @@ fi
 
 
 %changelog
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-33
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Wed Sep 17 2025 Remi Collet <remi@remirepo.net> - 1.1.1-32
+- rebuild for https://fedoraproject.org/wiki/Changes/php85
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-31
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-30
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Mon Oct 14 2024 Remi Collet <remi@fedoraproject.org> - 1.1.1-29
+- rebuild for https://fedoraproject.org/wiki/Changes/php84
+
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-28
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Tue Apr 16 2024 Remi Collet <remi@remirepo.net> - 1.1.1-27
+- drop 32-bit support
+  https://fedoraproject.org/wiki/Changes/php_no_32_bit
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-26
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-25
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Tue Oct 03 2023 Remi Collet <remi@remirepo.net> - 1.1.1-24
+- rebuild for https://fedoraproject.org/wiki/Changes/php83
+
+* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-23
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu Apr 20 2023 Remi Collet <remi@remirepo.net> - 1.1.1-22
+- use SPDX license ID
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-21
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Wed Oct 05 2022 Remi Collet <remi@remirepo.net> - 1.1.1-20
+- rebuild for https://fedoraproject.org/wiki/Changes/php82
+
+* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-19
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-18
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Thu Oct 28 2021 Remi Collet <remi@remirepo.net> - 1.1.1-17
 - rebuild for https://fedoraproject.org/wiki/Changes/php81
 - add upstream patch for PHP 8.1
 
-* Sat Feb  6 2021 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-4
-- Build for CentOS 8.3
+* Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-16
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Thu Mar  4 2021 Remi Collet <remi@remirepo.net> - 1.1.1-15
+- rebuild for https://fedoraproject.org/wiki/Changes/php80
 - add upstream patch for PHP 8
 
-* Sun Jun 28 2020 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-3
-- Build for CentOS 8.2
+* Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-14
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
-* Tue Aug  7 2018 Alexander Ursu <alexander.ursu@gmail.com> - 1.1.1-2
-- Build for CentOS 6 and PHP 5.6
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-13
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Thu Oct 03 2019 Remi Collet <remi@remirepo.net> - 1.1.1-11
+- rebuild for https://fedoraproject.org/wiki/Changes/php74
+
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Thu Oct 11 2018 Remi Collet <remi@remirepo.net> - 1.1.1-8
+- Rebuild for https://fedoraproject.org/wiki/Changes/php73
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Tue Oct 03 2017 Remi Collet <remi@fedoraproject.org> - 1.1.1-5
+- rebuild for https://fedoraproject.org/wiki/Changes/php72
+
+* Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
 * Mon Nov 14 2016 Remi Collet <remi@fedoraproject.org> - 1.1.1-1
 - update to 1.1.1
