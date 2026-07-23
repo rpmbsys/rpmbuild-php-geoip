@@ -2,6 +2,11 @@ name: RPM build
 on:
   push:
   workflow_dispatch:
+    inputs:
+      php:
+        description: 'PHP minor to build: all | 8.2 | 8.3 | 8.4 | 8.5'
+        default: all
+        type: string
 env:
   ARTIFACTORY_URL: https://rpmb.jfrog.io
   BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
@@ -13,51 +18,24 @@ env:
   RL10: 10.2.20260525.0
   RL10TAG: 10.2.20260525.0
 jobs:
-  test:
+  # Emit the build matrix, optionally filtered to a single PHP minor when this
+  # run was dispatched with the `php` input (the family orchestrator does this).
+  # A normal push leaves `php` unset -> builds every supported minor.
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      test: ${{ steps.matrix.outputs.test }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: matrix
+        run: python3 .github/scripts/php-matrix.py "${{ github.event.inputs.php || 'all' }}"
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    if: ${{ ! startsWith(github.ref_name, 'skip-rpm-') }}
     strategy:
       matrix:
-        include:
-          - compose-file: docker-compose.php84.yml
-            repo: php84custom
-            build: rocky10build
-            uploader: rocky10bintray
-            repo_path: rocky/10
-          - compose-file: docker-compose.php84.yml
-            repo: php84custom
-            build: rocky9build
-            uploader: rocky9bintray
-            repo_path: rocky/9
-          - compose-file: docker-compose.php83.yml
-            repo: php83custom
-            build: rocky10build
-            uploader: rocky10bintray
-            repo_path: rocky/10
-          - compose-file: docker-compose.php83.yml
-            repo: php83custom
-            build: rocky9build
-            uploader: rocky9bintray
-            repo_path: rocky/9
-          - compose-file: docker-compose.php82.yml
-            repo: php82custom
-            build: rocky10build
-            uploader: rocky10bintray
-            repo_path: rocky/10
-          - compose-file: docker-compose.php82.yml
-            repo: php82custom
-            build: rocky9build
-            uploader: rocky9bintray
-            repo_path: rocky/9
-          - compose-file: docker-compose.php85.yml
-            repo: php85custom
-            build: rocky10build
-            uploader: rocky10bintray
-            repo_path: rocky/10
-          - compose-file: docker-compose.php85.yml
-            repo: php85custom
-            build: rocky9build
-            uploader: rocky9bintray
-            repo_path: rocky/9
+        include: ${{ fromJSON(needs.setup.outputs.test) }}
     env:
       BUILD_COMPOSE_FILE: ${{ matrix.compose-file }}
       BINTRAY_REPO: ${{ matrix.repo }}
